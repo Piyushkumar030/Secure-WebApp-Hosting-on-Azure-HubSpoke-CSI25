@@ -1,121 +1,102 @@
+# 🔐 Secure Hosting of Web App via Azure Application Gateway  
+## 🌐 Hub-and-Spoke Topology | Microsoft Azure | Internship Project
 
-# 🔐 Secure Azure WebApp Hosting using Hub-Spoke Architecture – CSI'25
-
-This project demonstrates secure hosting of a web application on Microsoft Azure using a Hub-Spoke network topology. It ensures isolation, custom DNS resolution, traffic filtering, and centralized security through services like Azure Firewall, Application Gateway, and Bastion.
+![Azure](https://img.shields.io/badge/Azure-Sandbox-blue?style=flat&logo=microsoft-azure)
+![Project](https://img.shields.io/badge/Secure%20Cloud%20Hosting-Deployed-brightgreen)
+![Status](https://img.shields.io/badge/Status-Completed-success)
 
 ---
 
-## 📌 Project Overview
+## 📁 About the Project
 
-| Component              | Purpose                                                      |
-|------------------------|--------------------------------------------------------------|
-| **Hub VNet**           | Centralized security controls (Firewall, App Gateway, DNS VM) |
-| **Spoke-Web VNet**     | Hosts the Web Application (Azure App Service or VM)          |
-| **Spoke-Storage VNet** | Hosts secure Storage Account (no public access)              |
-| **Azure Firewall**     | Filters all traffic and logs activity centrally              |
-| **Application Gateway**| Handles SSL Offloading, Custom Routing, and Public Entry     |
-| **DNS Forwarder VM**   | Resolves Azure and on-prem DNS queries privately             |
-| **Azure Bastion**      | Secure VM access without public IPs                          |
+This project demonstrates how to **securely host a web application on Azure** using a **Hub-and-Spoke network topology**. It uses **Network Security Groups (NSGs)**, **Route Tables**, **VMs**, and **custom routing** to simulate traffic filtering via a firewall — all deployed in the **Microsoft Learn Sandbox** under limited permissions.
+
+> 💡 Note: The real Azure Firewall service was replaced with a **SimulatedFirewallVM** due to Sandbox limitations.
 
 ---
 
 ## 🎯 Objectives
 
-1. Implement Hub-Spoke architecture with centralized security
-2. Configure private DNS forwarding between VNets and on-prem
-3. Route all traffic through Azure Firewall
-4. Set up Application Gateway with:
-   - Public & Private frontend
-   - SSL Offloading
-   - Custom listeners & routing
-5. Host WebApp securely with no direct public exposure
-6. Securely store data in private Storage Account
+- Design a secure Azure network using hub-and-spoke topology.  
+- Deploy and configure VNets, subnets, peering, and NSGs.  
+- Route traffic through a simulated firewall (via custom UDR).  
+- Host a sample Web VM with NSG filtering and RDP (test setup).  
+- Document limitations and provide complete architecture walkthrough.
 
 ---
 
-## 🛠 Technologies Used
+## ⚙️ Services & Tools Used
 
-- Microsoft Azure (Sandbox)
-- Virtual Networks (VNets)
-- Azure Firewall
-- Azure Application Gateway
-- Azure Bastion
-- Network Peering
-- DNS Forwarder (Windows Server 2019)
-- Storage Account (Private)
-- App Service or VM-based WebApp Hosting
-- SSL Certificate (self-signed or managed)
+- **Azure Virtual Network (VNet)**
+- **Subnets** with segmentation
+- **Network Security Groups (NSGs)**  
+- **Route Table** with custom routes  
+- **Virtual Machines (Windows Server 2019)**  
+- **Microsoft Learn Sandbox** (free environment)
 
 ---
 
-## 🔧 Setup Summary
+## 🧱 Architecture Overview
 
-1. ✅ Created Hub VNet with 3 subnets:
-   - AzureFirewallSubnet
-   - AzureFirewallManagementSubnet
-   - HubSubNet
+- **Hub-VNet**: Contains `SimulatedFirewallVM`
+- **Spoke-Web-VNet**: Hosts `WebVM` (application server)
+- **Spoke-Storage-VNet**: Storage placeholder (no public access)
+- **Peering**: Connects Spokes to Hub for centralized routing
+- **Routing**: All 0.0.0.0/0 traffic forwarded to firewall VM
 
-2. ✅ Created Spoke VNets:
-   - `Spoke-Web-VNet` with `WebSubnet`
-   - `Spoke-Storage-VNet` with `StorageSubnet`
-
-3. ✅ Established VNet peering between Hub ↔ Web & Hub ↔ Storage
-
-4. ✅ Deployed:
-   - DNS Forwarder VM in HubSubNet
-   - Installed DNS Role
-   - Added 8.8.8.8 as forwarder
-
-5. ✅ Configured custom DNS settings in all VNets pointing to DNS VM
-
-6. ✅ Deployed Azure Firewall + Public IP
-
-7. ✅ Deployed Application Gateway with:
-   - SSL Certificate
-   - Multi-listener routing
-   - Frontend IPs (Public & Private)
-   - Backend pool with WebApp
-
-8. ✅ Enabled SSL Offloading and HTTP → HTTPS redirection
+> 🔒 Access is restricted using NSGs + route enforcement.
 
 ---
 
-## 🔒 Security Highlights
+## 🖼️ Screenshots Included
 
-- No public access to Storage Account
-- WebApp accessed only via App Gateway
-- DNS traffic resolved securely via DNS VM
-- RDP access via Bastion or whitelisted IPs
-- Centralized logging & control with Azure Firewall
-
----
-
-## 📸 Screenshots
-
-> Folder: `screenshots/`
-
-- VNet and Peering setup
-- DNS Forwarder configuration
-- Application Gateway routing
-- WebApp output via App Gateway
+- ✅ VNets and Subnets Created  
+- ✅ NSG Rules (3389 / 8080) Configured  
+- ✅ Route Table + Association  
+- ✅ Peering Setup  
+- ✅ VM Overview Pages  
+- ⚠️ RDP Timeout Screenshot (sandbox limitation shown)
 
 ---
 
-## 📁 Folder Structure
+## 📄 Project Report
 
-```plaintext
-secure-azure-webapp-hubspoke-csi25/
-│
-├── screenshots/
-│   └── (project images here)
-│
-├── dns/
-│   └── dns-config.txt
-│
-├── gateway/
-│   └── ssl-cert-info.txt
-│
-├── terraform/ (optional if used)
-│   └── main.tf
-│
-└── README.md
+The full PDF report is available in the repo:  
+📎 `Secure Hosting of Web App on Azure-CSI25.pdf`
+
+Includes:
+- Step-by-step implementation  
+- Screenshots for each phase  
+- Description of sandbox constraints  
+- Conclusion and references
+
+---
+
+## 🧠 Learning Outcome
+
+This project helped build real knowledge of:
+
+- Azure network security  
+- Firewall simulation with NSG + routing  
+- Practical VM setup  
+- Limitations of sandboxed cloud environments
+
+---
+
+## 📚 References
+
+1. [Hub-and-Spoke Network Topology – Microsoft Learn](https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke)  
+2. [Secure Azure VNets with NSG & Route Tables – Microsoft Docs](https://learn.microsoft.com/en-us/azure/virtual-network/tutorial-filter-network-traffic)
+
+---
+
+## 🙋 Author
+
+**👨‍💻 Piyush Kumar Dey**  
+B.Tech | Computer Science | Celebal Technology Internship  
+
+
+---
+
+> 📌 *Feel free to fork this repo, give feedback, or connect on LinkedIn!*
+
